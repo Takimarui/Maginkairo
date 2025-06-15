@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _interactRadius = 1f;
     [SerializeField] private LayerMask interactableLayers;
 
+    public Vector2 MoveVector { get; private set; }
+
     private Rigidbody2D _rb;
     private Vector2 _inputVector;
 
@@ -54,7 +56,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 movement = _inputVector * (_moveSpeed * Time.fixedDeltaTime);
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
+        MoveVector = _inputVector * _moveSpeed;
+
+        Vector2 movement = MoveVector * Time.fixedDeltaTime;
         Vector2 targetPosition = _rb.position + movement;
 
         Vector2 snappedPosition = SnapToPixelGrid(targetPosition);
